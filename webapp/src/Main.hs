@@ -14,7 +14,7 @@ import GHC.Stack
 import qualified Network.Wai as Wai
 import Network.Wai (Request)
 import qualified Network.Wai.Handler.Warp as Warp
--- import qualified Network.Wai.Handler.WarpTLS as WarpTLS
+import qualified Network.Wai.Handler.WarpTLS as WarpTLS
 import Servant
 import Servant
 import Servant.API.Generic
@@ -81,13 +81,13 @@ main = do
            fullServer)
       app :: Application
       app = serveWithContext (Proxy :: Proxy FullAPI) auth hoisted
-  -- let tlsSettings =
-  --       WarpTLS.tlsSettings "../keys/certificate.pem" "../keys/key.pem"
+  let tlsSettings =
+        WarpTLS.tlsSettings "../keys/certificate.pem" "../keys/key.pem"
   let warpSettings =
         Warp.setOnException onExceptionAct $
         Warp.setPort 8000 Warp.defaultSettings
-  -- WarpTLS.runTLS tlsSettings warpSettings app
-  Warp.runSettings warpSettings app
+  WarpTLS.runTLS tlsSettings warpSettings app
+  -- Warp.runSettings warpSettings app
 
 onExceptionAct :: HasCallStack => Maybe Wai.Request -> SomeException -> IO ()
 onExceptionAct _mReq exc = do
