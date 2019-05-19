@@ -1,0 +1,28 @@
+name:                waitls-onexception-bug
+version:             0.1.0.0
+#synopsis:
+#description:
+homepage:            https://github.com/k-bx/waitls-onexception-bug#readme
+license:             BSD3
+author:              Kostiantyn Rybnikov
+maintainer:          k-bx@k-bx.com
+copyright:           2019 Kostiantyn Rybnikov
+category:            Web
+extra-source-files:
+- README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - text
+  - transformers
+  - warp
+  - wai
+  - string-class
+  - warp-tls
+  - unliftio
+  - http-types
+
+executables:
+  waitls-onexception-bug:
+    source-dirs:      src
+    main:             Main.hs

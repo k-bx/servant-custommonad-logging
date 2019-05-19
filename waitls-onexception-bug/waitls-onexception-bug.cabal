@@ -1,0 +1,38 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: dc029c8444554dfd01b3368cff1126d22645195820a08aa018b4450b15fa60c0
+
+name:           waitls-onexception-bug
+version:        0.1.0.0
+category:       Web
+homepage:       https://github.com/k-bx/waitls-onexception-bug#readme
+author:         Kostiantyn Rybnikov
+maintainer:     k-bx@k-bx.com
+copyright:      2019 Kostiantyn Rybnikov
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+executable waitls-onexception-bug
+  main-is: Main.hs
+  other-modules:
+      Paths_waitls_onexception_bug
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , http-types
+    , string-class
+    , text
+    , transformers
+    , unliftio
+    , wai
+    , warp
+    , warp-tls
+  default-language: Haskell2010
