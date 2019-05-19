@@ -33,7 +33,6 @@ data Env =
 
 type AppM = ReaderT Env IO
 
--- type AppM = ReaderT Env Servant.Handler
 type FullAPI = ToServantApi API
 
 data API route =
@@ -61,7 +60,6 @@ fullServer :: ServerT FullAPI AppM
 fullServer = genericServerT server
 
 nt :: Env -> AppM a -> Servant.Handler a
--- nt s x = runReaderT x s
 nt s x = Servant.Handler $ ExceptT $ try $ runReaderT x s
 
 type UserId = Int
