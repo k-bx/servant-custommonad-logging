@@ -26,7 +26,9 @@ import Servant.Server.Experimental.Auth
   )
 import Servant.Server.Experimental.Auth (AuthHandler)
 import Servant.Server.Generic (AsServerT, genericServerT)
+import System.IO
 import UnliftIO.Exception (SomeException, try)
+import qualified Control.Exception
 
 data Env =
   Env
@@ -69,6 +71,14 @@ auth = (mkAuthHandler (const (pure 1))) :. EmptyContext
 
 main :: IO ()
 main = do
+  hSetBuffering stdout LineBuffering
+  hSetBuffering stderr LineBuffering
+  let pureApp :: Wai.Application
+      pureApp req respond =
+        Control.Exception.bracket_
+          (putStrLn "Allocating scarce resource")
+          (putStrLn "Cleaning up")
+          (error "Erroring out")
   let env = Env
       hoisted :: ServerT FullAPI Servant.Handler
       hoisted =
@@ -84,7 +94,8 @@ main = do
   let warpSettings =
         Warp.setOnException onExceptionAct $
         Warp.setPort 8000 Warp.defaultSettings
-  WarpTLS.runTLS tlsSettings warpSettings app
+  -- WarpTLS.runTLS tlsSettings warpSettings app
+  WarpTLS.runTLS tlsSettings warpSettings pureApp
   -- Warp.runSettings warpSettings app
 
 onExceptionAct :: HasCallStack => Maybe Wai.Request -> SomeException -> IO ()

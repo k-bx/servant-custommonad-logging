@@ -30,7 +30,7 @@ main = do
         Control.Exception.bracket_
           (putStrLn "Allocating scarce resource")
           (putStrLn "Cleaning up")
-          (respond $ error "Erroring out")
+          (error "Erroring out")
   let tlsSettings =
         WarpTLS.tlsSettings "../keys/certificate.pem" "../keys/key.pem"
   let warpSettings =

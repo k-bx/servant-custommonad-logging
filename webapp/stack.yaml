@@ -1,4 +1,6 @@
 resolver: lts-13.21
 packages:
 - .
-# extra-deps: []
+extra-deps:
+- /home/kb/workspace/haskell-servant/servant/servant
+- /home/kb/workspace/haskell-servant/servant/servant-server
