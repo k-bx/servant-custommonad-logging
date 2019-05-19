@@ -5,7 +5,7 @@
 
 module Main where
 
-import Control.Exception (SomeException)
+import Control.Monad.Trans.Except (ExceptT(..))
 import Control.Monad.Trans.Reader
 import qualified Data.String.Class as S
 import Data.Text (Text)
@@ -25,12 +25,14 @@ import Servant.Server.Experimental.Auth
   )
 import Servant.Server.Experimental.Auth (AuthHandler)
 import Servant.Server.Generic (AsServerT, genericServerT)
+import UnliftIO.Exception (SomeException, try)
 
 data Env =
   Env
 
-type AppM = ReaderT Env Servant.Handler
+type AppM = ReaderT Env IO
 
+-- type AppM = ReaderT Env Servant.Handler
 type FullAPI = ToServantApi API
 
 data API route =
@@ -58,7 +60,8 @@ fullServer :: ServerT FullAPI AppM
 fullServer = genericServerT server
 
 nt :: Env -> AppM a -> Servant.Handler a
-nt s x = runReaderT x s
+-- nt s x = runReaderT x s
+nt s x = Servant.Handler $ ExceptT $ try $ runReaderT x s
 
 type UserId = Int
 

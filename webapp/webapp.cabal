@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7d21e3494187f4ba39ad3ef512ed41e4ec13012e2001a8d37f4d834e6471d4c1
+-- hash: 105981dfff1056bea67f06a6e134d1c672c590cc209b6b270461d394985032d2
 
 name:           webapp
 version:        0.1.0.0
@@ -32,6 +32,7 @@ executable webapp
     , string-class
     , text
     , transformers
+    , unliftio
     , wai
     , warp
   default-language: Haskell2010
