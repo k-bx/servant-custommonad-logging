@@ -5,9 +5,13 @@
 
 module Main where
 
+import Control.Exception (SomeException)
 import Control.Monad.Trans.Reader
+import qualified Data.String.Class as S
 import Data.Text (Text)
 import GHC.Generics
+import GHC.Stack
+import qualified Network.Wai as Wai
 import Network.Wai (Request)
 import qualified Network.Wai.Handler.Warp as Warp
 import Servant
@@ -33,6 +37,7 @@ data API route =
   API
     { _index :: route :- Get '[ PlainText] Text
     , _ping :: route :- "api" :> "ping" :> Get '[ PlainText] Text
+    , _errorOut :: route :- "api" :> "error-out" :> Get '[ PlainText] Text
     }
   deriving (Generic)
 
@@ -42,8 +47,12 @@ api = genericApi (Proxy :: Proxy API)
 fullApi :: Proxy FullAPI
 fullApi = Proxy
 
+errorOut :: HasCallStack => AppM Text
+errorOut = do
+  error "Erroring out!"
+
 server :: API (AsServerT AppM)
-server = API {_index = pure "hey", _ping = pure "pong"}
+server = API {_index = pure "hey", _ping = pure "pong", _errorOut = errorOut}
 
 fullServer :: ServerT FullAPI AppM
 fullServer = genericServerT server
@@ -68,4 +77,15 @@ main = do
            fullServer)
       app :: Application
       app = serveWithContext (Proxy :: Proxy FullAPI) auth hoisted
-  Warp.run 8000 app
+  let warpSettings =
+        Warp.setOnException onExceptionAct $
+        Warp.setPort 8000 Warp.defaultSettings
+  Warp.runSettings warpSettings app
+
+onExceptionAct :: HasCallStack => Maybe Wai.Request -> SomeException -> IO ()
+onExceptionAct _mReq exc = do
+  S.putStrLn
+    ("Error: caught an exception: " <> tshow exc <> ". Call stack: " <>
+     S.toText (prettyCallStack callStack))
+
+tshow = S.toText . show

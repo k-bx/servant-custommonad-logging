@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e54b21c8f92128578efdfab34772c34e4b8f63fe9bc10cabebee0c9a47005616
+-- hash: 7d21e3494187f4ba39ad3ef512ed41e4ec13012e2001a8d37f4d834e6471d4c1
 
-name:           proj
+name:           webapp
 version:        0.1.0.0
 category:       Web
 homepage:       https://github.com/githubuser/servant-custommonad-logging#readme
@@ -19,16 +19,17 @@ build-type:     Simple
 extra-source-files:
     README.md
 
-executable servant-generic-hoist
+executable webapp
   main-is: Main.hs
   other-modules:
-      Paths_proj
+      Paths_webapp
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
     , servant
     , servant-server
+    , string-class
     , text
     , transformers
     , wai
