@@ -1,4 +1,18 @@
 resolver: lts-13.21
 packages:
 - .
-# extra-deps: []
+extra-deps:
+- git: https://github.com/yesodweb/wai.git
+  commit: 8f9662b4a19ebb08adf610be7c245135c8bf706c
+  subdirs:
+    - wai
+    - warp-tls
+    - warp
+    - time-manager
+- git: https://github.com/kazu-yamamoto/http2.git
+  commit: b633b52d1827fe83537920514b90018ae36a9599
+allow-newer: true
+# - /home/kb/workspace/wai/warp-tls
+# - /home/kb/workspace/wai/warp
+# - /home/kb/workspace/wai/wai
+
